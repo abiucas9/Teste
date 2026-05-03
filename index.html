@@ -1,59 +1,146 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Mini App</title>
-  <style>
-    body {
-      background: #0f172a;
-      color: #e5e7eb;
-      font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .card {
-      background: #020617;
-      padding: 20px;
-      border-radius: 12px;
-      width: 300px;
-      box-shadow: 0 0 20px #38bdf8;
-    }
-    button {
-      background: #38bdf8;
-      border: none;
-      padding: 8px;
-      width: 100%;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Frankenstein do Web Dev 🧟‍♂️</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.11.1/sass.sync.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <style type="text/scss" id="meu-scss">
+        $bg-color: #1a1a1a;
+        $text-color: #f1f1f1;
+        $vue-color: #42b883;
+        $react-color: #61dafb;
+        $angular-color: #dd1b16;
+
+        body {
+            background-color: $bg-color;
+            color: $text-color;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+
+            &:hover {
+                transform: scale(1.05);
+            }
+
+            &.vue { border-bottom: 5px solid $vue-color; }
+            &.react { border-bottom: 5px solid $react-color; }
+            &.angular { border-bottom: 5px solid $angular-color; }
+        }
+    </style>
 </head>
-<body>
+<body ng-app="meuAppAngular">
 
-<div class="card">
-  <h2 id="msg">Carregando...</h2>
-  <button onclick="somar()">Somar 2 + 3</button>
-  <p id="res"></p>
-</div>
+    <h1> Frankenstein Web Dev ⚡🧟‍♂️</h1>
+    <p>HTML, CSS, JS, SCSS, Vue, React e Angular... TUDO EM UM ARQUIVO SÓ!</p>
 
-<script>
-fetch("http://127.0.0.1:8000/")
-  .then(r => r.json())
-  .then(d => {
-    document.getElementById("msg").innerText = d.msg
-  })
+    <div class="container">
+        <div id="app-vue" class="card vue">
+            <h2>{{ titulo }}</h2>
+            <p>{{ mensagem }}</p>
+            <button @click="mudarMensagem" style="background:#42b883; color:black; padding:5px; cursor:pointer;">
+                Ação Vue
+            </button>
+        </div>
 
-function somar() {
-  fetch("http://127.0.0.1:8000/api/soma?a=2&b=3")
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById("res").innerText =
-        "Resultado: " + d.resultado
-    })
-}
-</script>
+        <div id="app-react" class="card react"></div>
+
+        <div class="card angular" ng-controller="MeuController">
+            <h2>{{ titulo }}</h2>
+            <p>{{ mensagem }}</p>
+            <input type="text" ng-model="mensagem" placeholder="Digite algo..." style="width:90%; padding:5px;">
+        </div>
+    </div>
+
+    <script type="text/babel">
+        // ----------------------------------------------------
+        // 1. COMPILANDO O SCSS
+        // ----------------------------------------------------
+        const scssCodigo = document.getElementById('meu-scss').innerHTML;
+        Sass.compile(scssCodigo, function(resultado) {
+            const tagEstilo = document.createElement('style');
+            tagEstilo.innerHTML = resultado.text;
+            document.head.appendChild(tagEstilo);
+        });
+
+        // ----------------------------------------------------
+        // 2. INICIANDO O VUE 3
+        // ----------------------------------------------------
+        const appVue = Vue.createApp({
+            data() {
+                return {
+                    titulo: 'Vue.js',
+                    mensagem: 'Eu sou reativo e levinho!'
+                }
+            },
+            methods: {
+                mudarMensagem() {
+                    this.mensagem = 'Vue dominou este card! 💚';
+                }
+            }
+        });
+        appVue.mount('#app-vue');
+
+        // ----------------------------------------------------
+        // 3. INICIANDO O REACT 18 (Usando Babel para ler JSX)
+        // ----------------------------------------------------
+        function AppReact() {
+            const [contador, setContador] = React.useState(0);
+            return (
+                <div>
+                    <h2>React</h2>
+                    <p>Você clicou {contador} vezes!</p>
+                    <button 
+                        onClick={() => setContador(contador + 1)} 
+                        style={{background:'#61dafb', color:'black', padding:'5px', cursor:'pointer'}}>
+                        Ação React
+                    </button>
+                </div>
+            );
+        }
+        const rootReact = ReactDOM.createRoot(document.getElementById('app-react'));
+        rootReact.render(<AppReact />);
+
+        // ----------------------------------------------------
+        // 4. O ANGULARJS JÁ FOI INICIADO NO <body ng-app>
+        // MAS PRECISAMOS DO CONTROLLER DELE AQUI NO JS PURO
+        // ----------------------------------------------------
+    </script>
+
+    <script>
+        angular.module('meuAppAngular', []).controller('MeuController', function($scope) {
+            $scope.titulo = "AngularJS";
+            $scope.mensagem = "Altere o texto no input! Two-way data binding puro! ❤️";
+        });
+    </script>
 
 </body>
 </html>
