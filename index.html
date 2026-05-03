@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini App</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: #020617;
+      padding: 20px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 20px #38bdf8;
+    }
+    button {
+      background: #38bdf8;
+      border: none;
+      padding: 8px;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2 id="msg">Carregando...</h2>
+  <button onclick="somar()">Somar 2 + 3</button>
+  <p id="res"></p>
+</div>
+
+<script>
+fetch("http://127.0.0.1:8000/")
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById("msg").innerText = d.msg
+  })
+
+function somar() {
+  fetch("http://127.0.0.1:8000/api/soma?a=2&b=3")
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("res").innerText =
+        "Resultado: " + d.resultado
+    })
+}
+</script>
+
+</body>
+</html>
