@@ -3,55 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tartaruga no HTML 🐢</title>
-    
+    <title>Zoeira Driven Development 🤡</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.11.1/sass.sync.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
     <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            text-align: center;
-            padding-top: 20px;
-        }
-        /* Esconde os avisos de carregamento do PyScript */
-        .py-overlay { display: none; }
+    <py-config>
+        packages = ["art", "pyjokes", "faker"]
+    </py-config>
+
+    <style type="text/scss" id="codigo-scss">
+        $bg-dark: #0d1117;
+        $text-light: #c9d1d9;
         
-        /* O PyScript vai criar a tela do Turtle aqui dentro automaticamente,
-           então vamos dar uma estilizadinha nela! */
-        canvas {
-            border: 2px solid #333;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-            background-color: white;
-            margin-top: 20px;
+        body {
+            background-color: $bg-dark;
+            color: $text-light;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 20px;
         }
+
+        h1 { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 12px;
+            width: 280px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+
+            &:hover { transform: translateY(-5px) scale(1.02); }
+
+            &.vue { border-top: 5px solid #42b883; }
+            &.react { border-top: 5px solid #61dafb; }
+            &.angular { border-top: 5px solid #dd1b16; }
+            &.python { 
+                border-top: 5px solid #ffde57; 
+                width: 100%; 
+                max-width: 600px; 
+            }
+        }
+
+        button {
+            background: white; color: black;
+            border: none; padding: 10px 15px;
+            border-radius: 5px; cursor: pointer;
+            font-weight: bold; margin-top: 10px;
+            &:active { transform: scale(0.95); }
+        }
+
+        input { padding: 8px; width: 90%; margin-top: 10px; border-radius: 5px; border: none; }
+        
+        pre { text-align: left; background: black; padding: 15px; border-radius: 8px; color: #39ff14; overflow-x: auto; }
+        .py-overlay { display: none; } /* Esconde o loading feio do PyScript */
     </style>
 </head>
-<body>
+<body ng-app="AppCaos">
 
-    <h1>A Tartaruga do Python na Web! 🐢</h1>
-    <p>Desenhando uma espiral colorida sem usar um pingo de JavaScript.</p>
+    <h1>O Frankenstein do Dev 🧟‍♂️🤡</h1>
+    <p>Se o seu PC travar, a culpa não é minha.</p>
+
+    <div class="dashboard">
+        
+        <div id="app-vue" class="card vue">
+            <h2>Vue.js</h2>
+            <p>Vontade de viver codando:</p>
+            <h1 style="color:#42b883">{{ sanidade }}%</h1>
+            <button @click="codar" style="background:#42b883">Programar 1h</button>
+        </div>
+
+        <div id="app-react" class="card react"></div>
+
+        <div class="card angular" ng-controller="CaosController">
+            <h2>Angular.js</h2>
+            <p>O que meu chefe pediu:</p>
+            <input type="text" ng-model="tarefa">
+            <p>O que eu vou entregar:</p>
+            <strong style="color:#dd1b16">"Bug em: {{ tarefa }}"</strong>
+        </div>
+
+        <div class="card python">
+            <h2>Python Inútil (PyScript) 🐍</h2>
+            <p>Gerador automático de desculpas para não trabalhar.</p>
+            <button py-click="gerar_migue" style="background:#ffde57; color:black">Gerar Migué via Python</button>
+            <pre id="tela-python">Carregando a máquina de mentiras (Pyodide instalando). Aguarde uns segundos...</pre>
+        </div>
+
+    </div>
+
+    <script type="text/babel">
+        // 1. Compila o SCSS e injeta na página
+        const scssCodigo = document.getElementById('codigo-scss').innerHTML;
+        Sass.compile(scssCodigo, function(result) {
+            const style = document.createElement('style');
+            style.innerHTML = result.text;
+            document.head.appendChild(style);
+        });
+
+        // 2. Inicia o Vue 3
+        const appVue = Vue.createApp({
+            data() { return { sanidade: 100 } },
+            methods: { codar() { this.sanidade -= 10; if(this.sanidade < 0) this.sanidade = 'Faleceu'; } }
+        });
+        appVue.mount('#app-vue');
+
+        // 3. Inicia o React 18 (Cria bugs infinitos)
+        function AppReact() {
+            const [bugs, setBugs] = React.useState(1);
+            return (
+                <div>
+                    <h2>React.js</h2>
+                    <p>Bugs no sistema: <strong>{bugs}</strong></p>
+                    <button onClick={() => setBugs(bugs * 2 + 1)} style={{background:'#61dafb'}}>
+                        Consertar 1 Bug
+                    </button>
+                </div>
+            );
+        }
+        const rootReact = ReactDOM.createRoot(document.getElementById('app-react'));
+        rootReact.render(<AppReact />);
+    </script>
+
+    <script>
+        // 4. Inicia o Angular 1
+        angular.module('AppCaos', []).controller('CaosController', function($scope) {
+            $scope.tarefa = "Fazer login de usuário";
+        });
+    </script>
 
     <py-script>
-        import turtle
+        from js import document
+        from art import text2art
+        import pyjokes
+        from faker import Faker
+        import random
 
-        # Criando a nossa tartaruga
-        t = turtle.Turtle()
-        
-        # Deixando ela super rápida
-        t.speed(0)
+        # Configura identidades brasileiras falsas
+        fake = Faker('pt_BR')
 
-        # Desenhando uma espiral maluca
-        cores = ["red", "blue", "green", "orange", "purple", "yellow"]
-        
-        for x in range(100):
-            t.pencolor(cores[x % 6]) # Alterna as cores da lista
-            t.width(x / 10 + 1)      # Vai engrossando a linha aos poucos
-            t.forward(x)             # Anda pra frente
-            t.left(59)               # Gira quase 60 graus
+        def gerar_migue(event=None):
+            tela = document.getElementById("tela-python")
             
+            arte = text2art("MIGUE 404", font="small")
+            nome = fake.name()
+            cidade = fake.city()
+            doenca_falsa = random.choice(["Gastroenterite Crônica", "Conjuntivite de código", "Febre do StackOverflow"])
+            piada = pyjokes.get_joke()
+            
+            texto = f"{arte}\n"
+            texto += f">>> ALERTA DE DESCULPA ESFARRAPADA <<<\n\n"
+            texto += f"Chefe, infelizmente não vou poder comparecer hoje.\n"
+            texto += f"Eu estava em {cidade} visitando meu primo {nome},\n"
+            texto += f"e acabei contraindo um caso severo de {doenca_falsa}.\n\n"
+            texto += f"E como dizem no mundo da programação:\n'{piada}'\n\n"
+            texto += "Espero que entenda minha ausência. ✌️"
+            
+            tela.innerText = texto
     </py-script>
 
 </body>
